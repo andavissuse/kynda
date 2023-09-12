@@ -17,7 +17,8 @@ Steps:
   * ask for a project name and create a .\/\<project-name\> directory
   * ask where the data bundles are located
   * ask what features you want to use for comparison
-  * for each feature, ask for the name of a script that will extract and return the feature value(s).  The script may invoke other binaries; the key point is that the script must return a list of feature value(s) (one value per line).
+  * for each feature, ask for:
+    * path to an executable that will extract and return the feature value(s).  The script may invoke other binaries; the key point is that the script must return a list of feature value(s) (one value per line).  See the doc directory for executable details and templates.
 
 Result:
 * .\/\<project-name\>\/\<project-name\>.conf file
@@ -31,15 +32,20 @@ Steps:
   * create datasets of the features
     
 Result:
-  * datasets in the .\/\<project-name\>/datasets directory.
+* datasets in the .\/\<project-name\>/datasets directory.
 
 ## Stage 3 - Analysis
 Prerequisites:
+* For each feature, an executable that compares feature value(s) to existing values in the feature-specific dataset.
 * A new data bundle to compare to existing data bundles.
 
 Steps:
-* Run "kynda.sh \<project-name\> \<new-data-bundle\>.  This will:
+* Run "kynda.sh \<project-name\> \<new-data-bundle\>".  This will:
   * extract the features from the new data bundle
-  * ask for different importance levels (weights) for each feature
-  * use ML algorithms along with the specified weights to find similar data bundles
+  * for each feature, ask for:
+    * path to the executable that will do the feature-based comparison.  See the doc directory for executable details and templates.
+    * ask for different importance levels (weights) for each feature
+  * use the comparison executables along with the specified weights to find similar data bundles
 
+Result:
+* List of data bundles that are similar to the new data bundle
