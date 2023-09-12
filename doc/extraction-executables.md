@@ -4,7 +4,7 @@ A feature "extraction executable" is responsible for extracting a specific type 
 
 * Arguments:  The executable should take a data bundle as its argument.
 
-* Return values:  The executable should return a list of the values for the intended feature.  The values should be returned as one string per line (even numeric values are treated as strings; it is the responsibility of the comparison executable to transform the strings into other types of values for comparison.
+* Return values:  The executable should return a list of the values for the intended feature.  The values should be returned as one string per line.  Even numeric values should be provided as strings; it is the responsibility of the comparison executable to transform the strings into other types of values as needed for comparison.
 
 ## Template
 See .\/templates\/extraction-executable.tmpl
