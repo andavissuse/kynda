@@ -11,9 +11,9 @@ A feature "comparison executable" is responsible for comparing specific feature 
   * The executable should contain code to handle 6 comparison operators:
     * = (equal)
     * < (less-than)
-    * > (greater-than)
+    * \> (greater-than)
     * <= (less-than-or-equal)
-    * >= (greater-than-or-equal)
+    * \>= (greater-than-or-equal)
     * ~ (similar)
 
 * Return values:  The executable should return a list of the data bundles (one per line) that meet the comparison requested.
