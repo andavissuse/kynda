@@ -20,7 +20,8 @@ Steps:
   * for each feature, ask for the name of a script that will extract and return the feature value(s).  The script may invoke other binaries; the key point is that the script must return a list of feature value(s) (one value per line).
 
 Result:
-* .\/\<project-name\>\/\<project-name\>.conf file.
+* .\/\<project-name\>\/\<project-name\>.conf file
+* feature extraction executables in the .\/\<project-name\>\/bin directory
   
 ## Stage 2 - Ingestion
 Steps:

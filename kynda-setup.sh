@@ -18,6 +18,7 @@ function usage() {
 echo "What is the project name (no spaces)?"
 read projName
 mkdir -p ./${projName}
+mkdir -p ./${projName}/bin
 confFile="./${projName}/${projName}.conf"
 
 # Create the conf file
@@ -27,6 +28,7 @@ echo "DATA_DIR=$dataDir" >> $confFile
 echo "What is the executable that will return the per-bundle identifier?"
 read idExecutable
 echo "ID_EXECUTABLE=${idExecutable}" >> $confFile
+cp $idExecutable $projName/bin/
 
 featureNum=1
 while true; do
@@ -51,8 +53,10 @@ while true; do
     echo "FEATURE${featureNum}_NAME=$featureName" >> $confFile
     echo "FEATURE${featureNum}_TYPE=${featureType}" >> $confFile
     echo "FEATURE${featureNum}_EXECUTABLE=${featureExecutable}" >> $confFile
+    cp $featureExecutable $projName/bin/
     if [ "$ordered" = y ]; then
     	echo "FEATURE${featureNum}_ORDER_EXECUTABLE=${orderExecutable}" >> $confFile
+	cp $orderExecutable $projName/bin/
     fi
     echo "Add another feature (y/n)?"
     read response
