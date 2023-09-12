@@ -84,7 +84,6 @@ if [ "$response" = "y" ]; then
 		if [ "$response" = "y" ]; then
 			echo -n "Enter new weight percentage for feature $featureName (must be between 0 and 100; default is $defWeight%): "
 			read featureWeight
-			feature${featureNum}Weight=$featureWeight
 		fi
 		totalWeights=$((totalWeights + featureWeight))
 		[ $DEBUG ] && echo "*** DEBUG: $0: totalWeights: $totalWeights" >&2
@@ -99,16 +98,18 @@ for featureNum in $totalFeatures; do
 	eval featureName=\$$tmpVar
 	tmpVar="FEATURE${featureNum}_TYPE"
 	eval featureType=\$$tmpVar
-	if [ "$featureType" = "single" ]; then
-		# find similar entries based on search parameters
-	elif [ "$featureType" = "multi" ]; then 	
-		# find similar entries based on vector similarity search
-	else
-		echo "Unsupported feature type, exiting..."
-		exit 1
-	fi
+	echo "Finding similar data bundles based on feature $featureName..."
+#	if [ "$featureType" = "single" ]; then
+#	elif [ "$featureType" = "multi" ]; then 	
+#	else
+#		echo "Unsupported feature type, exiting..."
+#		exit 1
+#	fi
+	featureNum=$((featureNum + 1))
 done
 
 # Combine results based on weights
+echo "Combining results based based on feature weights..."
+echo "Overall similar data bundles to $bundle: <tbd>"
 
 exit 0

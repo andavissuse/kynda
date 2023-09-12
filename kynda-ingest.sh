@@ -69,7 +69,8 @@ for bundle in `find $DATA_DIR -mindepth 1 -maxdepth 1`; do
 			echo "$bundleId $featureVal" >> $datasetsDir/$featureName.csv
 		else
 			$featureExecutable $bundle > $tmpDir/featureVals.tmp
-			python3 ./common/dataset_onehot.py -d ${datasetsDir}/${featureName}.csv $bundleId $tmpDir/featureVals.tmp
+			[ $DEBUG ] && python3 ./common/dataset_onehot.py -d ${datasetsDir}/${featureName}.csv $bundleId $tmpDir/featureVals.tmp ||
+			python3 ./common/dataset_onehot.py ${datasetsDir}/${featureName}.csv $bundleId $tmpDir/featureVals.tmp
 		fi
 		featureNum=$((featureNum + 1))
 	done
