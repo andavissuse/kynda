@@ -1,0 +1,65 @@
+#!/bin/sh
+
+#
+# This script compares <feature-name> values to existing values in a <feature-name> dataset.
+#
+# Inputs: 1) feature-value
+#	  2) feature-dataset
+#	  3) comparison operator - must be one of:
+#		eq (equal),
+#		lt (less-than),
+#		gt (greater-than),
+#		le (less-than-or-equal),
+#		ge (greater-than-or-equal),
+#		sim (similar)
+#	  4) comparison-specific parameter
+#
+# Output: data bundles that satisfy the comparison (one per line)
+#
+
+# functions
+function usage() {
+        echo "Usage: `basename $0` [-d(ebug)] feature-value feature-dataset comparison-operator comparison-parameter"
+        exit $1
+}
+
+# arguments
+if [ "$1" = "--help" ]; then
+        usage 0
+fi
+while getopts 'hd' OPTION; do
+        case $OPTION in
+                h)
+                        usage 0
+                        ;;
+                d)
+                        DEBUG=1
+                        ;;
+        esac
+done
+shift $((OPTIND - 1))
+if [ ! "$3"; then
+        usage 1
+elif [ ! -r "$2" ]; then
+        echo "Dataset $dataset does not exist, exiting..."
+        exit 1
+elif ! [[ "$3" =~ ^(eq|lt|gt|le|ge|similar ]; then
+        echo "Comparison operator not supported, exiting..."
+	exit 1
+else
+	featureVal="$1"
+	dataset="$2"
+	compOperator="$3"
+	if [ ! -z "$4" ]; then
+		compParameter="$4"
+	fi
+fi
+
+# Main section - This should contain code to compare (based on the specific comparison operator)
+# the feature value against the feature-specific dataset.  Generally this section would contain
+# a case statement to handle the different comparison operators.
+
+# Return section - This should contain code to return (one per line) the ids of data bundles
+# that satisfy the requested comparison.
+
+exit 0
