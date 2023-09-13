@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#
+# This script extracts <feature-name> values from a data bundle.
+#
+# Inputs: 1) data-bundle
+#
+# Output: <feature-name> values (one per line)
+#
+
+# functions
+function usage() {
+        echo "Usage: `basename $0` [-d(ebug)] data-bundle"
+        exit $1
+}
+
+# arguments
+if [ "$1" = "--help" ]; then
+        usage 0
+fi
+while getopts 'hd' OPTION; do
+        case $OPTION in
+                h)
+                        usage 0
+                        ;;
+                d)
+                        DEBUG=1
+                        ;;
+        esac
+done
+shift $((OPTIND - 1))
+if [ ! "$1"; then
+        usage 1
+elif [ ! -d "$1" ]; then
+        echo "Data bundle $1 does not exist."
+        exit 1
+  else
+        bundl="$1"
+fi
+
+# Main section - This should contain code to extract the feature value(s) from the data bundle
+# Each feature value should be treated as a string (even numeric values should be provided as
+# strings; it is the responsibility of the comparison executables to transform the strings into
+# other types for comparison.
+
+# Return section - This should contain code to return the feature value(s) as one string per line.
+
+exit 0
