@@ -11,57 +11,54 @@
 # functions
 function usage() {
         echo "Usage: `basename $0` [-d(ebug)]"
-        exit $1
 }
 
 # Get the project name and set up directory structure
-echo "What is the project name (no spaces)?"
+echo -n "Project name (no spaces)? "
 read projName
-mkdir -p ./${projName}
-mkdir -p ./${projName}/bin
-confFile="./${projName}/${projName}.conf"
+echo -n "Full path to project directory (will be created if needed)? "
+read projDir
+if [ -z "$projDir" ]; then
+	echo "No project directory specified, exiting ..."
+	exit 1
+fi
+echo -n "Project configuration file (default: ${projDir}/${projName}.conf)? "
+read confFile
+if [ -z "$confFile" ]; then
+	confFile="${projDir}/${projName}.conf"
+fi
 
 # Create the conf file
-echo "Where are the $projName data bundles located (full path to a directory)?"
+echo "PROJECT_NAME=$projName" >> $confFile
+echo "PROJECT_DIR=$projDir" >> $confFile
+echo -n "Full path to directory containing $projName data bundles? "
 read dataDir
 echo "DATA_DIR=$dataDir" >> $confFile
-echo "What is the executable that will return the per-bundle identifier?"
+echo -n "Executable to pre-process data bundle (optional)? "
+read preExecutable
+echo "PRE_EXECUTABLE=${preExecutable}" >> $confFile 
+echo -n "Executable to return the per-bundle identifier? "
 read idExecutable
 echo "ID_EXECUTABLE=${idExecutable}" >> $confFile
-cp $idExecutable $projName/bin/
 
 featureNum=1
 while true; do
-    echo "Feature to be compared?"
+    echo -n "Name of feature to be compared? "
     read featureName
-    featureType="single"
-    echo "Is feature multi-valued (y/n)?"
-    read multivalued
-    if [ "$multivalued" = "y" ]; then
-	    featureType="multi"
-    fi
-    echo "Executable to extract feature value(s)?"
+    echo -n "Type of feature (ordinal/categorical)? "
+    read featureType
+    echo -n "Executable to extract feature value(s)? "
     read featureExecutable
-    if [ "$featureType" = "single" ]; then
-	echo "Is feature ordered (y/n)?"
-	read ordered
-	if [ "$ordered" = "y" ]; then
-            "Executable to provide ordering?"
-	    read orderExecutable
-	fi
-    fi
     echo "FEATURE${featureNum}_NAME=$featureName" >> $confFile
     echo "FEATURE${featureNum}_TYPE=${featureType}" >> $confFile
     echo "FEATURE${featureNum}_EXECUTABLE=${featureExecutable}" >> $confFile
-    cp $featureExecutable $projName/bin/
-    if [ "$ordered" = y ]; then
-    	echo "FEATURE${featureNum}_ORDER_EXECUTABLE=${orderExecutable}" >> $confFile
-	cp $orderExecutable $projName/bin/
-    fi
-    echo "Add another feature (y/n)?"
+    echo -n "Add another feature (y/n)? "
     read response
     if [ "$response" = "n" ]; then
         break
     fi
     featureNum=$((featureNum + 1))
 done
+
+echo "$projName configuration file is $confFile.  Use this configuration file when invoking"
+echo "kynda-ingest.sh and kynda.sh."

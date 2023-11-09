@@ -9,15 +9,23 @@ datasets to compare a new data bundle to the existing data bundles to find simil
 ## Stage 1: Setup
 Prerequisites:
 * Collection of data bundles (should be in a directory; format does not matter)
+* (Optional) Script or other executable to pre-process the data bundle (e.g., script to uncompress tarball)
 * List of feature(s) that you want to use for comparison
-* For each feature, a script or other executable that returns the feature value(s) (1 per line) from a data bundle.
+* For each feature:
+  * script or other executable that extracts the feature value(s) from a data bundle.
   
 Steps:
 * Run the kynda-setup.sh script.  This will:
   * ask for a project name and create a .\/\<project-name\> directory
   * ask where the data bundles are located
+  * ask for a pre-processing script
   * ask what features you want to use for comparison
   * for each feature, ask for:
+    * feature type:
+      * single-valued numeric
+      * single-valued text
+      * multi-valued numeric
+      * multi-valued text
     * path to an executable that will extract and return the feature value(s).  The script may invoke other binaries; the key point is that the script must return a list of feature value(s) (one value per line).  See the doc directory for executable details and templates.
 
 Result:
@@ -36,16 +44,18 @@ Result:
 
 ## Stage 3 - Analysis
 Prerequisites:
-* For each feature, an executable that compares feature value(s) to existing values in the feature-specific dataset.
 * A new data bundle to compare to existing data bundles.
 
 Steps:
 * Run "kynda.sh \<project-name\> \<new-data-bundle\>".  This will:
   * extract the features from the new data bundle
   * for each feature, ask for:
-    * path to the executable that will do the feature-based comparison.  See the doc directory for executable details and templates.
-    * ask for different importance levels (weights) for each feature
+    * match type (=, <, >, ~) - note that match operators are dependent on feature type
+    * if match type is "similar" (~), importance level (weight) - note that total weights must equal 100% 
   * use the comparison executables along with the specified weights to find similar data bundles
 
 Result:
 * List of data bundles that are similar to the new data bundle
+
+TODO:
+* Modify kynda setup to allow adding of data sources and/or features

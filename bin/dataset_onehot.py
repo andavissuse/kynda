@@ -66,10 +66,12 @@ def main(argv):
     sc_data = [id] + [1] * (len(sc_cols) - 1)
     df_sc = pd.DataFrame([sc_data], columns=sc_cols)
     if DEBUG == "TRUE":
+        print("*** DEBUG: " + sys.argv[0] + ": df_dataset:", df_dataset, file=sys.stderr)
         print("*** DEBUG: " + sys.argv[0] + ": df_sc:", df_sc, file=sys.stderr)
 
     # add or replace vector into/in dataset
-    df_appended = df_dataset.append(df_sc, sort=False)
+#    df_appended = df_dataset.append(df_sc, ignore_index=True, sort=False)
+    df_appended = pd.concat([df_dataset, df_sc])
     if DEBUG == "TRUE":
         print("*** DEBUG: " + sys.argv[0] + ": df_appended:", df_appended, file=sys.stderr)
     df_dedup = df_appended.drop_duplicates(subset=['id'], keep='last').fillna(0)
