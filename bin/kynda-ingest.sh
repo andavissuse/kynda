@@ -80,6 +80,7 @@ for bundle in `find $DATA_DIR -mindepth 1 -maxdepth 1`; do
 		fi
 		featureNum=$((featureNum + 1))
 	done
+	rm -rf $bundle
 done
 rm -rf $tmpDir
 
