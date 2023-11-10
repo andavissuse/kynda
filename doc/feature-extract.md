@@ -1,6 +1,6 @@
 # Feature Extraction Executable
 ## Overview
-A "feature extraction executable" is responsible for extracting specific feature data from a data bundle.  The executable may be as simple as a script that greps a file in a data bundle to extract a value, or it may be a script that calls other more complex executables to extract value(s) for a specific feature.  The executable may have any name (suggestion: <feature-name>-extract).  The requirements for a feature extraction executable are:
+A "feature extraction executable" is responsible for extracting specific feature data from a data bundle.  The executable may be as simple as a script that greps a file in a data bundle to extract a value, or it may be a script that calls other more complex executables to extract value(s) for a specific feature.  The executable may have any name.  The requirements for a feature extraction executable are:
 
 * Arguments:  The feature extraction executable should take a data bundle as its argument.  The data bundle may be in any format.
 
