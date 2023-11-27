@@ -15,26 +15,19 @@ Prerequisites:
   * script or other executable that extracts the feature value(s) from a data bundle.
   
 Steps:
-* Run the kynda-setup.sh script.  This will:
-  * ask for a project name and create a .\/\<project-name\> directory
-  * ask where the data bundles are located
-  * ask for a pre-processing script
-  * ask what features you want to use for comparison
-  * for each feature, ask for:
-    * feature type:
-      * single-valued numeric
-      * single-valued text
-      * multi-valued numeric
-      * multi-valued text
-    * path to an executable that will extract and return the feature value(s).  The script may invoke other binaries; the key point is that the script must return a list of feature value(s) (one value per line).  See the doc directory for executable details and templates.
+* Run "kynda-setup.sh" to create a project-specific configuration file.  kynda-setup.sh will ask for: 
+  * project name
+  * location of data bundles
+  * data bundle pre-processing executable (optional)
+  * features to be used for comparison
+  * executables that extract the feature value(s) from data bundles.
 
 Result:
 * .\/\<project-name\>\/\<project-name\>.conf file
-* feature extraction executables in the .\/\<project-name\>\/bin directory
   
 ## Stage 2 - Ingestion
 Steps:
-* Run "kynda-ingest.sh \<project-name\>".  This will:
+* Run "kynda-ingest.sh \<project-name\>" to build datasets.  Specifically, kynda-ingest.sh will:
   * read the .\/\<project-name\>\/\<project-name\>.conf file
   * use the specified extraction scripts to pull feature data from the existing data bundles
   * create datasets of the features
@@ -47,15 +40,12 @@ Prerequisites:
 * A new data bundle to compare to existing data bundles.
 
 Steps:
-* Run "kynda.sh \<project-name\> \<new-data-bundle\>".  This will:
+* Run "kynda.sh \<project-name\> \<new-data-bundle\>" to compare the new data bundle to existing data bundles.  Specifically, kynda.sh will:
   * extract the features from the new data bundle
-  * for each feature, ask for:
-    * match type (=, <, >, ~) - note that match operators are dependent on feature type
-    * if match type is "similar" (~), importance level (weight) - note that total weights must equal 100% 
-  * use the comparison executables along with the specified weights to find similar data bundles
+  * ask for per-feature weights to be used in comparison
+  * compare the new data bundle to existing data bundles based on desired per-feature weights
 
 Result:
 * List of data bundles that are similar to the new data bundle
 
-TODO:
-* Modify kynda setup to allow adding of data sources and/or features
+## For more info, see details in the doc directory.
