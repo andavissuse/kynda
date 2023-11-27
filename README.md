@@ -47,4 +47,5 @@ Steps:
 Result:
 * List of data bundles that are similar to the new data bundle
 
-## For more info, see details in the doc directory.
+## More Info
+Additional details and samples are available in the doc directory.
