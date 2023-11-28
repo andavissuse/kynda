@@ -3,7 +3,7 @@
 kynda is a software framework to create projects for comparing data bundles based on desired features and weights.  The whole idea of kynda is not to find "answers", but to find similarities based on features and user-supplied weights for each feature.
 
 ## Approach
-Using the kynda framework involves 3 stages:  SETUP, INGESTION, and ANALYSIS.  The setup stage defines the project (including where to find existing data bundles, features to be compared, etc.)  The ingestion stage accesses the existing data bundles, extracts feature data, and builds datasets.  The analysis stage uses the datasets and user-specified weights to find existing data bundles that are most similar to the new data bundle. 
+Using the kynda framework involves 3 stages:  SETUP, INGESTION, and ANALYSIS.  The setup stage defines the project (including where to find existing data bundles, features to be compared, etc.)  The ingestion stage accesses the existing data bundles, extracts feature data, and builds datasets.  The analysis stage uses the datasets and user-specified weights to find existing data bundles that are most similar to a new data bundle. 
 
 ## Stage 1: Setup
 Prerequisites:
