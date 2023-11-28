@@ -11,7 +11,7 @@ Prerequisites:
 * (Optional) Script or other executable to pre-process the data bundle (e.g., script to uncompress tarball)
 * List of feature(s) to use for comparison
 * For each feature:
-  * script or other executable that extracts the feature value(s) from a data bundle.
+  * script or other executable that extracts the feature value(s) from a data bundle
   
 Steps:
 * Run "kynda-setup.sh" to create a project-specific configuration file.  kynda-setup.sh will ask for: 
@@ -26,7 +26,7 @@ Result:
   
 ## Stage 2 - Ingestion
 Steps:
-* Run "kynda-ingest.sh \<project-name\>" to build datasets.  Specifically, kynda-ingest.sh will:
+* Run "kynda-ingest.sh \<project-name\>" to build datasets.  kynda-ingest.sh will:
   * read the .\/\<project-name\>\/\<project-name\>.conf file
   * use the specified extraction scripts to pull feature data from the existing data bundles
   * create datasets of the features
@@ -39,7 +39,7 @@ Prerequisites:
 * New data bundle to compare to existing data bundles
 
 Steps:
-* Run "kynda.sh \<project-name\> \<new-data-bundle\>" to compare the new data bundle to existing data bundles.  Specifically, kynda.sh will:
+* Run "kynda.sh \<project-name\> \<new-data-bundle\>" to compare the new data bundle to existing data bundles.  kynda.sh will:
   * extract the features from the new data bundle
   * ask for per-feature weights to be used in comparison
   * compare the new data bundle to existing data bundles based on desired per-feature weights
