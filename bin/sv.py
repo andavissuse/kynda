@@ -5,7 +5,7 @@
 # Inputs: 1) dataset file (space-delimited csv)
 #         2) feature file (space-delimited csv)
 #
-# Output: pandas dataframe (bundle name, score) of nearest neighbors
+# Output: pandas dataframe (instance name, score) of nearest neighbors
 #
 
 from __future__ import print_function
@@ -113,10 +113,10 @@ def main(argv):
         print("*** DEBUG: knn.py: num_nns:", num_nns, file=sys.stderr)
     for i in range(num_nns):
         ind = nn_inds[i]
-        bundle_name = df_dataset.at[nn_inds[i], 'id']
+        inst_name = df_dataset.at[nn_inds[i], 'id']
         dist = nn_dists[i]
-#        list_nns_entry = [bundle_name, (1 - dist)]
-        list_nns_entry = [bundle_name, dist]
+#        list_nns_entry = [inst_name, (1 - dist)]
+        list_nns_entry = [inst_name, dist]
         list_nns.append(list_nns_entry)
     if DEBUG == "TRUE":
         print("*** DEBUG: knn.py: list_nns:", list_nns, file=sys.stderr)

@@ -1,11 +1,11 @@
 #!/bin/sh
 
 #
-# This script sets up a kynda framework for a desired type of data bundle. 
+# This script sets up a kynda framework for a desired type of data instance. 
 #
 # Inputs: None
 #
-# Output: kynda-<bundle-name>.conf file
+# Output: kynda-<instance-name>.conf file
 #
 
 # functions
@@ -31,13 +31,13 @@ fi
 # Create the conf file
 echo "PROJECT_NAME=$projName" >> $confFile
 echo "PROJECT_DIR=$projDir" >> $confFile
-echo -n "Full path to directory containing $projName data bundles? "
-read dataDir
-echo "DATA_DIR=$dataDir" >> $confFile
-echo -n "Executable to pre-process data bundle (optional)? "
+echo -n "Full path to directory or csv containing $projName data entries? "
+read dataLoc
+echo "DATA_LOC=$dataLoc" >> $confFile
+echo -n "Executable to pre-process data entries (optional)? "
 read preExecutable
 echo "PRE_EXECUTABLE=${preExecutable}" >> $confFile 
-echo -n "Executable to return the per-bundle identifier? "
+echo -n "Executable to return the data entry identifier? "
 read idExecutable
 echo "ID_EXECUTABLE=${idExecutable}" >> $confFile
 

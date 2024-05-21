@@ -3,7 +3,7 @@
 # columns as needed for new values
 #
 # Inputs: 1) dataset file
-#         2) index value (bundle ID)
+#         2) index value (instance ID)
 #         3) file containing feature values (one per line)
 #
 # Output: New or updated binary dataset

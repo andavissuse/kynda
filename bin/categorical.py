@@ -7,7 +7,7 @@
 #         2) feature file (space-delimited csv)
 #         3) output dataset file (space-delimited csv)
 #
-# Output: Dataset (space-deliminted *.csv file) containing bundle names and distances
+# Output: Dataset (space-deliminted *.csv file) containing instance names and distances
 # from the feature vector.
 #
 
@@ -119,10 +119,10 @@ def main(argv):
         print("*** DEBUG:", os.path.basename(sys.argv[0]), "num_nns:", num_nns, file=sys.stderr)
     for i in range(num_nns):
         ind = nn_inds[i]
-        bundle_name = df_dataset.at[nn_inds[i], 'id']
+        inst_name = df_dataset.at[nn_inds[i], 'id']
         dist = nn_dists[i]
-#        list_nns_entry = [bundle_name, (1 - dist)]
-        list_nns_entry = [bundle_name, dist]
+#        list_nns_entry = [inst_name, (1 - dist)]
+        list_nns_entry = [inst_name, dist]
         list_nns.append(list_nns_entry)
     if DEBUG == "TRUE":
         print("*** DEBUG:", os.path.basename(sys.argv[0]), "list_nns:", list_nns, file=sys.stderr)

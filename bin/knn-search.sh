@@ -1,18 +1,18 @@
 #!/bin/sh
 
 #
-# This script searches feature datasets to find data bundles that meet specific per-feature
+# This script searches feature datasets to find data instances that meet specific per-feature
 # search parameters (=, <, >, ~).   
 #
 # Inputs: project-configuration-dir
-# 	  data-bundle
+# 	  data-instance
 # 	   
-# Output: data bundles (one per line) that meet search parameters
+# Output: data instances (one per line) that meet search parameters
 #
 
 # functions
 function usage() {
-	echo "Usage: `basename $0` [-h (usage)] [-d(ebug)] project-configuration-dir data-bundle"
+	echo "Usage: `basename $0` [-h (usage)] [-d(ebug)] project-configuration-dir data-instance"
         exit $1
 }
 
@@ -36,11 +36,11 @@ elif [ ! -r "$1" ]; then
 	echo "$0: Project configuration file $1 does not exist or is not readable, exiting ..."
 	exit 1
 elif [ ! -r "$2" ]; then
-	echo "$0: Data bundle $2 does not exist or is not readable, exiting ..."
+	echo "$0: Data instance $2 does not exist or is not readable, exiting ..."
 	exit 1
 else
 	confFile="$1"
-	bundle="$2"
+	inst="$2"
 fi
 
 # Source the configuration file
@@ -130,8 +130,8 @@ for featureName in $featureNameArray; do
 	featureNum=$((featureNum + 1))
 done
 
-# Find similar data bundles
-echo "Finding similar data bundles..."
+# Find similar data instances 
+echo "Finding similar data instances..."
 featureNum=1
 for featureName in $featureNameArray; do
 	featureType=`echo $featureTypeArray | cut -d' ' -f${featureNum}`
@@ -139,8 +139,8 @@ for featureName in $featureNameArray; do
 	featureExecutable=`echo $featureExecutableArray | cut -d' ' -f${featureNum}`
 	featureDataset="${datasetsDir}/${featureName}.csv"
 	[ $DEBUG ] && echo "*** DEBUG: $0: featureName: $featureName, featureType: $featureType, featureParameter: $featureParameter, featureExecutable: $featureExecutable, featureDataset: $featureDataset" >&2
-	echo "Extracting $featureName data from $bundle..."
-	featureVal=`$featureExecutable $bundle`
+	echo "Extracting $featureName data from $inst..."
+	featureVal=`$featureExecutable $inst`
 	[ $DEBUG ] && echo "*** DEBUG: $0: featureVal: $featureVal" >&2
 	case $featureType in
 		nsv)
@@ -209,6 +209,6 @@ done
 
 # Combine results based on weights
 echo "Combining results based based on search parameters and feature weights ..."
-echo "Overall similar data bundles to $bundle: <tbd>"
+echo "Overall similar data instances to $inst: <tbd>"
 
 exit 0

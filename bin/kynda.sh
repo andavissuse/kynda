@@ -1,18 +1,18 @@
 #!/bin/sh
 
 #
-# This script searches feature datasets to find data bundles that meet specific per-feature
+# This script searches feature datasets to find data instances that meet specific per-feature
 # search parameters (=, <, >, ~).   
 #
 # Inputs: project configuration file
-# 	  data bundle
+# 	  data instance
 # 	   
-# Output: data bundles (one per line) that meet search parameters
+# Output: data instances (one per line) that meet search parameters
 #
 
 # functions
 function usage() {
-	echo "Usage: `basename $0` [-h (usage)] [-d(ebug)] project-configuration-file data-bundle"
+	echo "Usage: `basename $0` [-h (usage)] [-d(ebug)] project-configuration-file data-instance"
         exit $1
 }
 
@@ -36,11 +36,11 @@ elif [ ! -r "$1" ]; then
 	echo "$0: Project configuration file $1 does not exist or is not readable, exiting ..."
 	exit 1
 elif [ ! -r "$2" ]; then
-	echo "$0: Data bundle $2 does not exist or is not readable, exiting ..."
+	echo "$0: Data instance $2 does not exist or is not readable, exiting ..."
 	exit 1
 else
 	confFile="$1"
-	bundle="$2"
+	inst="$2"
 fi
 
 # Source the configuration file
@@ -49,9 +49,9 @@ datasetsDir="${PROJECT_DIR}/datasets"
 tmpDir=`mktemp -d`
 [ $DEBUG ] && echo "*** DEBUG: $0: tmpDir: $tmpDir" >&2
 
-# Pre-process the data bundle
+# Pre-process the data instance
 if [ ! -z "$PRE_EXECUTABLE" ]; then
-	bundle=`$PRE_EXECUTABLE $bundle $tmpDir`
+	inst=`$PRE_EXECUTABLE $inst $tmpDir`
 fi
 
 # Build the featureName, featureType, and featureExecutable arrays
@@ -103,7 +103,7 @@ for featureName in $featureNameArray; do
 done
 [ $DEBUG ] && echo "*** DEBUG: $0: featureWeightArray: $featureWeightArray" >&2
 
-# Find similar data bundles
+# Find similar data instances
 featureNum=1
 for featureName in $featureNameArray; do
 	echo "Searching based on $featureName ..."
@@ -114,12 +114,12 @@ for featureName in $featureNameArray; do
 	featureMatchList=""
 	outFile="${tmpDir}/${featureName}-dist.csv"
 	if [ "$featureType" = "ordinal" ]; then
-		featureVal=`$featureExecutable $bundle`
+		featureVal=`$featureExecutable $inst`
 		[ $DEBUG ] && featureMatchList=`python3 ./ordinal.py -d $featureDataset $featureVal $outFile`
 		[ ! $DEBUG ] && featureMatchList=`python3 ./ordinal.py $featureDataset $featureVal $outFile`
 	else	
 		featureValFile="${tmpDir}/${featureName}.tmp"
-		$featureExecutable $bundle > $featureValFile
+		$featureExecutable $inst > $featureValFile
 		[ $DEBUG ] && featureMatchList=`python3 ./categorical.py -d $featureDataset $featureValFile $outFile`
 		[ ! $DEBUG ] && featureMatchList=`python3 ./categorical.py $featureDataset $featureValFile $outFile`
 	fi
@@ -130,6 +130,6 @@ done
 # This is where we worry about weights?
 echo "Combining results ..."
 
-echo "Overall similar data bundles to $bundle: <tbd>"
+echo "Overall similar data instances to $inst: <tbd>"
 
 exit 0

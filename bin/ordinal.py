@@ -7,7 +7,7 @@
 #         2) feature value
 #         3) output dataset file (space-delimited csv)
 #
-# Output: Dataset (space-deliminted *.csv file) containing bundle names and distances
+# Output: Dataset (space-deliminted *.csv file) containing instance names and distances
 # from the feature value.
 #
 
