@@ -26,7 +26,7 @@ Result:
   
 ## Stage 2 - Ingestion
 Steps:
-* Run "kynda-ingest.sh \<project-name\>" to build datasets.  kynda-ingest.sh will:
+* Run "kynda-ingest.sh <project-conf-file>" to build datasets.  kynda-ingest.sh will:
   * read the .\/\<project-name\>\/\<project-name\>.conf file
   * use the specified extraction scripts to pull feature data from the existing data instances
   * create datasets of the features
@@ -39,13 +39,18 @@ Prerequisites:
 * New data instance to compare to existing data instances
 
 Steps:
-* Run "kynda.sh \<project-name\> \<new-data-instance\>" to compare the new data instance to existing data instances.  kynda.sh will:
-  * extract the features from the new data instance
-  * ask for per-feature weights to be used in comparison
-  * compare the new data instance to existing data instances based on desired per-feature weights
+* Command line interface:
+    * Run "kynda.sh \<project-conf-file\> \<new-data-instance\>" to compare the new data instance to existing data instances.  kynda.sh will:
+        * extract the features from the new data instance
+        * ask for per-feature weights to be used in comparison
+        * compare the new data instance to existing data instances based on desired per-feature weights
+* Web (streamlit) interface:
+    * Run "streamlit run streamlit_ui.py -- \<project-conf-file\>
+    * Enter the data instance to be compared and the weights to use for comparison
+    * Click the submit button
 
 Result:
-* List of data instances that are similar to the new data instance
+* List of 10  data instances that are most similar to the new data instance
 
 ## More Info
 Additional details and samples are available in the doc directory.
