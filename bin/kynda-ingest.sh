@@ -44,7 +44,8 @@ tmpDir=`mktemp -d`
 
 # Build the datasets
 echo "Creating datasets ..."
-mkdir $datasetsDir
+mkdir -p $datasetsDir
+# Option 1: data instances are provided in a directory
 if [ -d "$DATA_LOC" ]; then
 	for entry in `find $DATA_LOC -mindepth 1 -maxdepth 1`; do
 		if [ ! -z "$PRE_EXECUTABLE" ]; then
@@ -69,6 +70,9 @@ if [ -d "$DATA_LOC" ]; then
 			eval featureExecutable=\$$tmpVar
 			[ $DEBUG ] && echo "*** DEBUG: $0: featureExecutable: $featureExecutable" >&2
 			if [ "$featureType" = "ordinal" ]; then
+				if [ ! -f $datasetsDir/$featureName.csv ]; then
+					echo "id val" > $datasetsDir/$featureName.csv
+				fi
 				# encoding:  just create a file with ids and values
 				featureVal=`$featureExecutable $entry`
 				[ $DEBUG ] && echo "*** DEBUG: $0: featureVal: $featureVal" >&2
@@ -76,18 +80,21 @@ if [ -d "$DATA_LOC" ]; then
 			else
 				# encoding:  one-hot
 				$featureExecutable $entry > $tmpDir/featureVals.tmp
-				[ $DEBUG ] && python3 ./dataset_onehot.py -d ${datasetsDir}/${featureName}.csv $entryId $tmpDir/featureVals.tmp ||
-				python3 ./dataset_onehot.py ${datasetsDir}/${featureName}.csv $entryId $tmpDir/featureVals.tmp
+				[ $DEBUG ] && python3 ./add_onehot.py -d ${datasetsDir}/${featureName}.csv $entryId $tmpDir/featureVals.tmp ||
+				python3 ./add_onehot.py ${datasetsDir}/${featureName}.csv $entryId $tmpDir/featureVals.tmp
 			fi
 			featureNum=$((featureNum + 1))
 		done
 		rm -rf $entry
 	done
 fi
+# Option 2: data instances are provided as rows in a file
 if [ -f "$DATA_LOC" ]; then
-	while IFS= read -r entry; do
+	sed '1d' $DATA_LOC | while IFS= read -r entry; do
 		[ $DEBUG ] && echo "*** DEBUG: $0: entry: $entry" >&2
-		entryId=`$ID_EXECUTABLE $entry`
+		entryFile="${tmpDir}/entry.tmp"
+		echo $entry >$entryFile
+		entryId=`$ID_EXECUTABLE $entryFile`
 		[ $DEBUG ] && echo "*** DEBUG: $0: entryId: $entryId" >&2
 		featureNum=1
 		while true; do
@@ -97,7 +104,8 @@ if [ -f "$DATA_LOC" ]; then
 				break
 			fi
 			[ $DEBUG ] && echo "*** DEBUG: $0: featureName: $featureName" >&2
-			echo "Adding $featureName data from $entry to $featureName dataset ..."
+			dataset="${datasetsDir}/${featureName}.csv"
+			[ $DEBUG ] && echo "*** DEBUG: $0: dataset: $dataset" >&2
 			tmpVar="FEATURE${featureNum}_TYPE"
 			eval featureType=\$$tmpVar
 			[ $DEBUG ] && echo "*** DEBUG: $0: featureType: $featureType" >&2
@@ -105,20 +113,23 @@ if [ -f "$DATA_LOC" ]; then
 			eval featureExecutable=\$$tmpVar
 			[ $DEBUG ] && echo "*** DEBUG: $0: featureExecutable: $featureExecutable" >&2
 			if [ "$featureType" = "ordinal" ]; then
+                               if [ ! -f $datasetsDir/$featureName.csv ]; then
+                                        echo "id val" > $datasetsDir/$featureName.csv
+                                fi
 				# encoding:  just create a file with ids and values
-				featureVal=`$featureExecutable $entry`
+				featureVal=`$featureExecutable $entryFile`
 				[ $DEBUG ] && echo "*** DEBUG: $0: featureVal: $featureVal" >&2
-				echo "$entryId $featureVal" >> $datasetsDir/$featureName.csv
+				echo "$entryId $featureVal" >> $dataset
 			else
 				# encoding:  one-hot
-				$featureExecutable $entry > $tmpDir/featureVals.tmp
-				[ $DEBUG ] && python3 ./dataset_onehot.py -d ${datasetsDir}/${featureName}.csv $entryId $tmpDir/featureVals.tmp ||
-				python3 ./dataset_onehot.py ${datasetsDir}/${featureName}.csv $entryId $tmpDir/featureVals.tmp
+				$featureExecutable $entryFile > $tmpDir/featureVals.tmp
+				[ $DEBUG ] && python3 ./add_onehot.py -d $dataset $entryId $tmpDir/featureVals.tmp ||
+				python3 ./add_onehot.py $dataset $entryId $tmpDir/featureVals.tmp
 			fi
 			featureNum=$((featureNum + 1))
 		done
-		rm -rf $entry
-	done < $DATA_LOC
+		rm -rf $entryFile
+	done
 fi
 rm -rf $tmpDir
 

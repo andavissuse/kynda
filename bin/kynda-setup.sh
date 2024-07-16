@@ -21,11 +21,23 @@ read projDir
 if [ -z "$projDir" ]; then
 	echo "No project directory specified, exiting ..."
 	exit 1
+else
+	mkdir -p $projDir
 fi
-echo -n "Project configuration file (default: ${projDir}/${projName}.conf)? "
+echo -n "Project configuration file to be created (default: ${projDir}/${projName}.conf)? "
 read confFile
 if [ -z "$confFile" ]; then
 	confFile="${projDir}/${projName}.conf"
+fi
+if [ -f "$confFile" ]; then
+	echo -n "Configuration file $confFile already exists.  Erase (y/n)? "
+	read resp
+	if [ "$resp" = "y" ]; then
+		rm -rf $confFile
+	else
+		"Exiting..."
+		exit 1
+	fi
 fi
 
 # Create the conf file
@@ -45,11 +57,14 @@ featureNum=1
 while true; do
     echo -n "Name of feature to be compared? "
     read featureName
+    echo -n "Description of feature? "
+    read featureDesc
     echo -n "Type of feature (ordinal/categorical)? "
     read featureType
     echo -n "Executable to extract feature value(s)? "
     read featureExecutable
     echo "FEATURE${featureNum}_NAME=$featureName" >> $confFile
+    echo "FEATURE${featureNum}_DESC=$featureDesc" >> $confFile
     echo "FEATURE${featureNum}_TYPE=${featureType}" >> $confFile
     echo "FEATURE${featureNum}_EXECUTABLE=${featureExecutable}" >> $confFile
     echo -n "Add another feature (y/n)? "

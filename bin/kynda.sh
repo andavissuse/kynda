@@ -79,13 +79,13 @@ done
 [ $DEBUG ] && echo "*** DEBUG: $0: featureTypeArray: $featureTypeArray" >&2
 [ $DEBUG ] && echo "*** DEBUG: $0: featureExecutableArray: $featureExecutableArray" >&2
 
-# Set default weight
-defWeight=$((100 / numFeatures))
-[ $DEBUG ] && echo "*** DEBUG: $0: defWeight: $defWeight" >&2
+# Set default weight percent
+defWeightPct=$((100 / numFeatures))
+[ $DEBUG ] && echo "*** DEBUG: $0: defWeightPct: $defWeightPct" >&2
 
 # Set search parameters and weights
 echo "Number of features: $numFeatures"
-echo "Default per-feature weight: $defWeight%"
+echo "Default per-feature weight: ${defWeightPct}%"
 echo "Weights may be changed, but sum of all weights must equal 100%."
 featureNum=1
 featureParameterArray=""
@@ -93,15 +93,15 @@ for featureName in $featureNameArray; do
 	featureType=`echo $featureTypeArray | cut -d' ' -f${featureNum}`
 	[ $DEBUG ] && echo "*** DEBUG: $0: featureName: $featureName" >&2
 	[ $DEBUG ] && echo "*** DEBUG: $0: featureType: $featureType" >&2
-	echo -n "$featureName weight (must be between 0 and 100%; default is $defWeight%)? "
-	read featureWeight
-	if [ -z "$featureWeight" ]; then
-		featureWeight="$defWeight"
+	echo -n "$featureName weight (must be between 0 and 100%; default is ${defWeightPct}%)? "
+	read featureWeightPct
+	if [ -z "$featureWeightPct" ]; then
+		featureWeightPct="$defWeightPct"
 	fi
-	featureWeightArray="$featureWeightArray $featureWeight"
+	[ $DEBUG ] && echo "*** DEBUG: $0: featureWeightPct: $featureWeightPct" >&2
+	echo $featureWeightPct > ${tmpDir}/${featureName}.weight
 	featureNum=$((featureNum + 1))
 done
-[ $DEBUG ] && echo "*** DEBUG: $0: featureWeightArray: $featureWeightArray" >&2
 
 # Find similar data instances
 featureNum=1
@@ -112,24 +112,26 @@ for featureName in $featureNameArray; do
 	featureDataset="${datasetsDir}/${featureName}.csv"
 	[ $DEBUG ] && echo "*** DEBUG: $0: featureName: $featureName, featureType: $featureType, featureExecutable: $featureExecutable, featureDataset: $featureDataset" >&2
 	featureMatchList=""
-	outFile="${tmpDir}/${featureName}-dist.csv"
+	outFile="${tmpDir}/${featureName}.dist"
 	if [ "$featureType" = "ordinal" ]; then
 		featureVal=`$featureExecutable $inst`
-		[ $DEBUG ] && featureMatchList=`python3 ./ordinal.py -d $featureDataset $featureVal $outFile`
-		[ ! $DEBUG ] && featureMatchList=`python3 ./ordinal.py $featureDataset $featureVal $outFile`
+		[ $DEBUG ] && featureMatchList=`python3 ./compare_scalar.py -d $featureDataset $featureVal $outFile`
+		[ ! $DEBUG ] && featureMatchList=`python3 ./compare_scalar.py $featureDataset $featureVal $outFile`
 	else	
 		featureValFile="${tmpDir}/${featureName}.tmp"
 		$featureExecutable $inst > $featureValFile
-		[ $DEBUG ] && featureMatchList=`python3 ./categorical.py -d $featureDataset $featureValFile $outFile`
-		[ ! $DEBUG ] && featureMatchList=`python3 ./categorical.py $featureDataset $featureValFile $outFile`
+		[ $DEBUG ] && featureMatchList=`python3 ./compare_vector.py -d $featureDataset $featureValFile $outFile`
+		[ ! $DEBUG ] && featureMatchList=`python3 ./compare_vector.py $featureDataset $featureValFile $outFile`
 	fi
 	featureNum=$((featureNum + 1))
 done
 
 # Combine results - Build a new array with elements (id, length).  Smallest length is best match.
 # This is where we worry about weights?
-echo "Combining results ..."
+echo "Combining results based on weights..."
+[ $DEBUG ] && topMatches=`python3 ./combine_results.py -d $tmpDir`
+[ ! $DEBUG ] && topMatches=`python3 ./combine_results.py $tmpDir`
+printf "%s %s\n" $topMatches
 
-echo "Overall similar data instances to $inst: <tbd>"
-
+#rm -rf $tmpDir
 exit 0

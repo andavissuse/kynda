@@ -1,0 +1,72 @@
+#!/bin/sh
+
+#
+# This script sets up a kynda framework for a desired type of data bundle. 
+#
+# Inputs: None
+#
+# Output: kynda-<bundle-name>.conf file
+#
+
+# functions
+function usage() {
+        echo "Usage: `basename $0` [-d(ebug)]"
+}
+
+# Get the project name and set up directory structure
+echo -n "Project name (no spaces)? "
+read projName
+echo -n "Full path of project directory to be created? "
+read projDir
+if [ -z "$projDir" ]; then
+	echo "Project directory cannot be empty, exiting ..."
+	exit 1
+fi
+echo -n "Full path of project configuration file (default: ${projDir}/${projName}.conf)? "
+read confFile
+if [ -z "$confFile" ]; then
+	confFile="${projDir}/${projName}.conf"
+fi
+extractDir="${projDir}/extract"
+mkdir -p $extractDir
+
+# Create the conf file
+echo "PROJECT_NAME=$projName" >> $confFile
+echo "PROJECT_DIR=$projDir" >> $confFile
+echo -n "Full path to directory containing $projName data bundles? "
+read dataDir
+echo "DATA_DIR=$dataDir" >> $confFile
+echo -n "Full path to executable to return the per-bundle identifier? "
+read idExecutable
+idExecutableName=`basename $idExecutable`
+cp $idExecutable ${extractDir}/
+echo "ID_EXECUTABLE=${extractDir}/${idExecutableName}" >> $confFile
+
+featureNum=1
+while true; do
+    echo -n "Name of feature to be compared? "
+    read featureName
+    echo "Feature types supported are:"
+    echo "    numeric-single-valued (nsv)"
+    echo "    numeric-multi-valued (nmv)"
+    echo "    text-single-valued (tsv)"
+    echo "    text-multi-valued (tmv)"
+    echo -n "Type of feature (nsv/nmv/tsv/tmv)? "
+    read featureType
+    echo -n "Full path to executable to extract feature value(s)? "
+    read featureExecutable
+    featureExecutableName=`basename $featureExecutable`
+    echo "FEATURE${featureNum}_NAME=$featureName" >> $confFile
+    echo "FEATURE${featureNum}_TYPE=${featureType}" >> $confFile
+    cp $featureExecutable ${extractDir}/
+    echo "FEATURE${featureNum}_EXECUTABLE=${extractDir}/${featureExecutableName}" >> $confFile
+    echo -n "Add another feature (y/n)? "
+    read response
+    if [ "$response" = "n" ]; then
+        break
+    fi
+    featureNum=$((featureNum + 1))
+done
+
+echo "$projName configuration file is $confFile.  Use this configuration file when invoking"
+echo "kynda-ingest.sh and kynda.sh."
