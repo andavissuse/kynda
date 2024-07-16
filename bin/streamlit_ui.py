@@ -47,7 +47,7 @@ def main(argv):
     # Set up the web page and form
     st.title('Criminal Incident Comparison')
     form = st.form("my_form")
-    form.header("Data instance (single-line csv file):")
+    form.header("Data instance:")
     uploaded_file = form.file_uploader(label="")
 
     form.header('Feature weights (must add up to 100%):')
@@ -90,6 +90,7 @@ def main(argv):
         # Combine based on weights
         top_matches = []
         top_matches = combine_results.main([temp_dir])
+        st.header("Top 10 matches based on weights:")
         st.text(top_matches)
 
 #        temp_dir.cleanup()
