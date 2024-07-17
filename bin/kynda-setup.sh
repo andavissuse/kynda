@@ -16,6 +16,8 @@ function usage() {
 # Get the project name and set up directory structure
 echo -n "Project name (no spaces)? "
 read projName
+echo -n "Project description? "
+read projDesc
 echo -n "Full path to project directory (will be created if needed)? "
 read projDir
 if [ -z "$projDir" ]; then
@@ -42,6 +44,7 @@ fi
 
 # Create the conf file
 echo "PROJECT_NAME=$projName" >> $confFile
+echo "PROJECT_DESC="projDesc" >> $confFile
 echo "PROJECT_DIR=$projDir" >> $confFile
 echo -n "Full path to directory or csv containing $projName data entries? "
 read dataLoc

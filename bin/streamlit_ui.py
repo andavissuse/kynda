@@ -36,6 +36,7 @@ def main(argv):
     conf_file = argv[arg_index_start]
 
     # Pull info from the conf file
+    project_desc = get_conf_values.main([conf_file, "project_desc"])
     project_dir = get_conf_values.main([conf_file, "project_dir"])
     datasets_dir = project_dir[0] + "/datasets"
     feature_name_list = get_conf_values.main([conf_file, "feature_name"])
@@ -45,7 +46,7 @@ def main(argv):
     num_features = len(feature_name_list)
 
     # Set up the web page and form
-    st.title('Criminal Incident Comparison')
+    st.title(project_desc)
     form = st.form("my_form")
     form.header("Data instance:")
     uploaded_file = form.file_uploader(label="")
