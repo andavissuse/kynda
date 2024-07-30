@@ -44,7 +44,7 @@ fi
 
 # Create the conf file
 echo "PROJECT_NAME=$projName" >> $confFile
-echo "PROJECT_DESC="projDesc" >> $confFile
+echo "PROJECT_DESC="$projDesc" >> $confFile
 echo "PROJECT_DIR=$projDir" >> $confFile
 echo -n "Full path to directory or csv containing $projName data entries? "
 read dataLoc

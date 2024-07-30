@@ -43,6 +43,7 @@ datasetsDir="${PROJECT_DIR}/datasets"
 tmpDir=`mktemp -d`
 
 # Build the datasets
+sleep 1000
 echo "Creating datasets ..."
 mkdir -p $datasetsDir
 # Option 1: data instances are provided in a directory

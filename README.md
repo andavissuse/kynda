@@ -45,7 +45,7 @@ Steps:
         * ask for per-feature weights to be used in comparison
         * compare the new data instance to existing data instances based on desired per-feature weights
 * Web (streamlit) interface:
-    * Run "streamlit run streamlit_ui.py -- \<project-conf-file\>
+    * Run "streamlit run kynda_streamlit_ui.py -- \<project-conf-file\>
     * Enter the data instance to be compared and the weights to use for comparison
     * Click the submit button
 
