@@ -20,4 +20,4 @@ This instance of the CIC project contains:
 
 * Datasets - separate dataset for each of the five features (created by kynda-ingest)
 
-* sample data instance (rawdata/inst.csv) taken from the 100.csv raw data
+* sample data instances (rawdata/inst\*.csv) taken from the 100.csv raw data
