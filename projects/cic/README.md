@@ -1,6 +1,6 @@
 # kynda Criminal Incident Comparison Project
 ## Overview
-The "Criminal Incident Comparison" (CIC) is a project that uses the kynda framework to find similar criminal incidents based on specified features and weights for comparison.  CIC uses the kynda framework to define features of interest, create per-feature datasets from the raw criminal incident data, and compare incidents based on the features and user-specified weights.
+"Criminal Incident Comparison" (CIC) is a project that uses the kynda framework to find similar criminal incidents based on specified features and weights for comparison.  CIC uses the kynda framework to define features of interest, create per-feature datasets from the raw criminal incident data, and compare incidents based on the features and user-specified weights.
 
 This instance of the CIC project contains:
 
